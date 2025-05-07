@@ -11,7 +11,6 @@ class Marca(model.Model):
 class Producto(model.Model):
     nombre = models.CharField(max_length=100)
     marca = models.ForeignKey(Marca,on_delete= models.CASCADE)
-    
     codigo_sucursal = models.ForeignKey(Sucursal,on_delete=models.CASCADE)
 
 class Precio(models.Model):
