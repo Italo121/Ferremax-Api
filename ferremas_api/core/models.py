@@ -29,17 +29,18 @@ class StockSucursal(models.Model):
     class Meta:
         unique_together = ('producto', 'sucursal')
 
-    def str(self):
+    def __str__(self):
         return f"{self.producto.nombre} en {self.sucursal.nombre}: {self.cantidad} unidades"
 
     def obtener_valor_dolar(self):
         try:
-            url = "https://api.exchangerate.host/latest?base=CLP&symbols=USD" 
-            api_key = "756599d274686168598c7eae"
-            url = f"https://api.tuapi.com/latest?base=CLP&symbols=USD&apikey={api_key}"
+            api_key = "8ce3ef513b90b3f280dc4eec"
+            url = f"https://v6.exchangerate-api.com/v6/{api_key}/latest/USD"
             response = requests.get(url)
+            response.raise_for_status()
             data = response.json()
-            return data['rates']['USD']
+            clp_rate = data['conversion_rates']['CLP']
+            return 1 / clp_rate  # CLP → USD
         except Exception as e:
             print("Error al obtener tipo de cambio:", e)
             return None
@@ -50,7 +51,7 @@ class StockSucursal(models.Model):
             self.precio_usd = round(float(self.precio) * tasa, 2)
         super().save(*args, **kwargs)
 
-    def str(self):
+    def __str__(self):
         return f"{self.sucursal.nombre} - {self.producto.nombre}"
 
 class Pedido(models.Model):
@@ -76,19 +77,22 @@ class DetallePedido(models.Model):
 
     def obtener_valor_dolar(self):
         try:
-            url = "https://api.exchangerate.host/latest?base=CLP&symbols=USD"
+            api_key = "8ce3ef513b90b3f280dc4eec"
+            url = f"https://v6.exchangerate-api.com/v6/{api_key}/latest/USD"
             response = requests.get(url)
+            response.raise_for_status()
             data = response.json()
-            return data['rates']['USD']
+            clp_rate = data['conversion_rates']['CLP']
+            return 1 / clp_rate  # CLP → USD
         except Exception as e:
             print("Error al obtener tipo de cambio:", e)
             return None
 
-    def save(self, args, **kwargs):
+    def save(self, *args, **kwargs):
         tasa = self.obtener_valor_dolar()
         if tasa:
             self.precio_usd = round(float(self.precio) * tasa, 2)
         super().save(*args, **kwargs)
 
-    def str(self):
+    def __str__(self):
         return f"{self.producto.nombre} x {self.cantidad}"
