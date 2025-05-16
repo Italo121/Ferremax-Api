@@ -5,9 +5,10 @@ import random
 import time
 from django.http import StreamingHttpResponse
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse 
 from .models import Sucursal, Producto, StockSucursal, Pedido, DetallePedido
 from .serializers import SucursalSerializer, ProductoSerializer, StockSucursalSerializer, PedidoSerializer, DetallePedidoSerializer
+import requests
 
 class SucursalViewSet(viewsets.ModelViewSet):
     queryset = Sucursal.objects.all()
@@ -52,3 +53,42 @@ def sse_stock_view(request):
 
 def index(request):
     return HttpResponse("Bienvenido a Ferremas API")
+
+def obtener_valor_dolar():
+    try:
+        api_key = "756599d274686168598c7eae"
+        url = f"https://api.tuapi.com/latest?base=CLP&symbols=USD&apikey={api_key}"        
+        response = requests.get(url)
+        data = response.json()
+        return data['rates']['USD']
+    except Exception as e:
+        print("Error al obtener tipo de cambio:", e)
+        return None
+
+def precio_en_usd(request):
+    tasa = obtener_valor_dolar()
+    if tasa is None:
+        return JsonResponse({'error': 'No se pudo obtener el tipo de cambio'}, status=500)
+
+    stocks = StockSucursal.objects.all()
+    Pedidos = DetallePedido.objects.all()
+
+    data = []
+    for stock in stocks:
+        data.append({
+            'producto': stock.producto,
+            'sucursal': stock.sucursal,
+            'cantidad': stock.cantidad,
+            'precio': stock.precio,
+            'precioUSD': round(stock.precio * tasa, 2)
+        })
+    for pedido in Pedidos:
+        data.append({
+            'pedido': pedido.pedido,
+            'producto': pedido.producto,
+            'cantidad': pedido.cantidad,
+            'precio': pedido.precio_unitario,
+            'precioUSD': round(pedido.precio_unitario * tasa, 2)
+        })
+
+    return JsonResponse({'productos': data})

@@ -15,7 +15,7 @@ class StockSucursalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = StockSucursal
-        fields = '__all__'
+        fields = ['producto','sucursal','cantidad','precio']
 
 class DetallePedidoSerializer(serializers.ModelSerializer):
     class Meta:
