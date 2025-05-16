@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from rest_framework import serializers
+
 from .models import Sucursal, Producto, StockSucursal, Pedido, DetallePedido
 
 class SucursalSerializer(serializers.ModelSerializer):
@@ -15,7 +17,7 @@ class StockSucursalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = StockSucursal
-        fields = ['producto','sucursal','cantidad','precio']
+        fields = ['producto','sucursal','cantidad','precio','precio_usd']
 
 class DetallePedidoSerializer(serializers.ModelSerializer):
     class Meta:

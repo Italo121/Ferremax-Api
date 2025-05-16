@@ -45,10 +45,10 @@ class StockSucursal(models.Model):
             print("Error al obtener tipo de cambio:", e)
             return None
 
-    def save(self, args, **kwargs):
+    def save(self, *args, **kwargs):
         tasa = self.obtener_valor_dolar()
         if tasa:
-            self.precio_usd = round(float(self.precio) * tasa, 2)
+            self.precio_usd = round(float(self.precio) / tasa, 2)  # Asegúrate de que esté dividiendo si CLP -> USD
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -91,7 +91,7 @@ class DetallePedido(models.Model):
     def save(self, *args, **kwargs):
         tasa = self.obtener_valor_dolar()
         if tasa:
-            self.precio_usd = round(float(self.precio) * tasa, 2)
+            self.precio_usd = round(float(self.precio_unitario) * tasa, 2)
         super().save(*args, **kwargs)
 
     def __str__(self):
