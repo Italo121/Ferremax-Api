@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'core',
+
 ]
 
 MIDDLEWARE = [
@@ -128,3 +129,6 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ]
 }
+
+ASGI_APPLICATION = 'ferremas_api.asgi.application'
+

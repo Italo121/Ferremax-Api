@@ -22,6 +22,7 @@ class StockSucursal(models.Model):
     sucursal = models.ForeignKey(Sucursal, on_delete=models.CASCADE)
     cantidad = models.PositiveIntegerField()
     precio = models.DecimalField(max_digits=10, decimal_places=2)
+    precio_usd = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
         unique_together = ('producto', 'sucursal')
@@ -48,6 +49,7 @@ class DetallePedido(models.Model):
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad = models.PositiveIntegerField()
     precio_unitario = models.DecimalField(max_digits=10, decimal_places=2)
+    precio_uni_usd = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
         return f"{self.producto.nombre} x {self.cantidad}"
