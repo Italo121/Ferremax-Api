@@ -6,7 +6,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from transbank.webpay.webpay_plus.transaction import Transaction 
 from django.conf import settings
-
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 from transbank.common.options import WebpayOptions
 from transbank.common.integration_type import IntegrationType
 from rest_framework import status
@@ -43,9 +44,11 @@ class WebpayInitView(APIView):
                 "error": str(e)
             }, status=status.HTTP_400_BAD_REQUEST)
 
+
+@method_decorator(csrf_exempt, name='dispatch')
 class WebpayResponse(APIView):
     def post(self, request):
-        token = request.data.get("token_ws")
+        token = request.POST.get("token_ws") 
         tx = Transaction()
         result = tx.commit(token)
         return Response(result)
