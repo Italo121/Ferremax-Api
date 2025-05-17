@@ -39,8 +39,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'core',
+    'pagos',
 
 ]
+
+TRANSBANK = {
+    'commerce_code': '597055555532',
+    'api_key': '597055555532',
+    'integration': True
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

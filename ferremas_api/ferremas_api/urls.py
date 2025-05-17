@@ -16,4 +16,5 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('sse/stock/', sse_stock_view),
     path('', index),
+    path('api/pagos/', include('pagos.urls')),
 ]
