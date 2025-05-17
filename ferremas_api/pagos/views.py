@@ -32,7 +32,8 @@ class WebpayInitView(APIView):
             response = transaction.create(buy_order, session_id, amount, return_url)
             url = response['url']
             token = response['token']
-            return Response({
+
+            return render(request, 'redirigir_webpay.html', {
                 "url": response ['url'],
                 "token": response ['token']
             }, 
@@ -49,7 +50,10 @@ class WebpayResponse(APIView):
         result = tx.commit(token)
         return Response(result)
     
-def redigir_webpay(request):
-    return render('/template/redirigir_webpay.html',request)
+def redirigir_webpay(request):
+    return render(request, 'redirigir_webpay.html')
+
     
 
+def iniciar_pago(request):
+    return render(request, 'iniciar_pago.html')
