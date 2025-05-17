@@ -30,10 +30,13 @@ class WebpayInitView(APIView):
 
         try:
             response = transaction.create(buy_order, session_id, amount, return_url)
-            return Response({
+            url = response['url']
+            token = response['token']
+            return Response(request, 'redirigir_webpay.html',{
                 "url": response ['url'],
                 "token": response ['token']
-            }, status=status.HTTP_200_OK)
+            }, 
+            status=status.HTTP_200_OK)
         except Exception as e:
             return Response({
                 "error": str(e)
@@ -45,3 +48,5 @@ class WebpayResponse(APIView):
         tx = Transaction()
         result = tx.commit(token)
         return Response(result)
+    
+
