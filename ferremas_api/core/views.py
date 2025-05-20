@@ -56,11 +56,11 @@ def index(request):
 
 def obtener_valor_dolar():
     try:
-        api_key = "756599d274686168598c7eae"
-        url = f"https://api.tuapi.com/latest?base=CLP&symbols=USD&apikey={api_key}"        
+        api_key = "8ce3ef513b90b3f280dc4eec"
+        url = f"https://v6.exchangerate-api.com/v6/{api_key}/latest/USD"
         response = requests.get(url)
         data = response.json()
-        return data['rates']['USD']
+        return data['conversion_rates']['CLP']
     except Exception as e:
         print("Error al obtener tipo de cambio:", e)
         return None

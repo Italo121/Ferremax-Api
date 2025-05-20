@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from core.views import SucursalViewSet, ProductoViewSet, StockSucursalViewSet, PedidoViewSet, DetallePedidoViewSet, sse_stock_view, index
+from core.views import SucursalViewSet, ProductoViewSet, StockSucursalViewSet, PedidoViewSet, DetallePedidoViewSet, sse_stock_view, index, precio_en_usd
 
 
 router = DefaultRouter()
@@ -17,4 +17,5 @@ urlpatterns = [
     path('sse/stock/', sse_stock_view),
     path('', index),
     path('api/pagos/', include('pagos.urls')),
+    path("api/precio-en-usd/", precio_en_usd, name="precio_en_usd"),
 ]
