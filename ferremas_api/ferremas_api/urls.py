@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from core.views import SucursalViewSet, ProductoViewSet, StockSucursalViewSet, PedidoViewSet, DetallePedidoViewSet, sse_stock_view, index, precio_en_usd
+from core.views import SucursalViewSet, ProductoViewSet, StockSucursalViewSet, PedidoViewSet, DetallePedidoViewSet, sse_stock_view, index, precio_en_usd, proto_product_create
 
 
 router = DefaultRouter()
@@ -16,6 +16,7 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('sse/stock/', sse_stock_view),
     path('', index),
+    path('api/grpc/create-product/', proto_product_create, name='proto_product_create'),
     path('api/pagos/', include('pagos.urls')),
     path("api/precio-en-usd/", precio_en_usd, name="precio_en_usd"),
 ]
